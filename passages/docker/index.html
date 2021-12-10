@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="风">
+  
+  
+  
+  <title>docker部署工作环境 | 风</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="docker,php,docker,env,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="blog">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">风 | xiaoxiaoxiao</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/xiaoxiaoxiaox" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>docker部署工作环境</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-04-11
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/docker/">
+            docker
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <ul>
+<li><a href="#window10">window10</a></li>
+<li><a href="#window7">window7</a></li>
+<li><a href="#docker-compose">docker-compose</a></li>
+<li><a href="#docker">docker</a></li>
+</ul>
+<h3 id="window10"><a href="#window10" class="headerlink" title="window10"></a>window10</h3><ul>
+<li><p>window10下安装注意事项:</p>
+<ul>
+<li>不能跟虚拟机同时使用,如vm-ware</li>
+<li>需要查看系统是否开启hyper-v</li>
+</ul>
+</li>
+<li><p>window下直接下载安装包安装</p>
+<ul>
+<li><a href="https://hub.docker.com/editions/community/docker-ce-desktop-windows" target="_blank" rel="noopener">下载地址</a></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>安装成功测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查看版本</span><br><span class="line">$ docker -v</span><br><span class="line"></span><br><span class="line">#测试运行</span><br><span class="line">$ docker run hello-world</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="window7"><a href="#window7" class="headerlink" title="window7"></a>window7</h3><ul>
+<li><a href="https://github.com/docker/toolbox/releases" target="_blank" rel="noopener">git下载地址</a></li>
+<li><a href="https://docs.docker.com/toolbox/overview/" target="_blank" rel="noopener">官网下载地址</a></li>
+<li><a href="https://docs.docker.com/toolbox/toolbox_install_windows/" target="_blank" rel="noopener">安装教程</a></li>
+</ul>
+<blockquote>
+<p>安装错误解决</p>
+<ul>
+<li>This computer doesn’t have VT-X/AMD-v enabled. Enabling it in the BIOS is mandatory<ul>
+<li>进入bios</li>
+<li>进入Virtualization(security-&gt;Virtualization)</li>
+<li>将其中的选项打开,设置为enabled</li>
+</ul>
+</li>
+<li>error getting ip address<ul>
+<li>进入虚拟机管理程序(vm virtual box)关闭虚拟机在启动</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>设置虚拟机共享文件</p>
+<ul>
+<li>选中虚拟机,右键设置</li>
+<li>共享文件夹</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>设置虚拟机虚拟磁盘地址</p>
+<ul>
+<li>虚拟的默认存储地址(C:\Users\Administrator.docker\machine\machines)</li>
+<li>复制默认的虚拟磁盘到一个新的地址</li>
+<li>类型后缀为vmdk</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>虚拟机docker默认用户密码</p>
+<ul>
+<li>docker </li>
+<li>tcuser</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>docker toolbox加速</p>
+<ul>
+<li><a href="http://guide.daocloud.io/dcs/daocloud-9153151.html#docker-toolbox" target="_blank" rel="noopener">文档地址</a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh default</span><br><span class="line">$ sudo sed -i &quot;s|EXTRA_ARGS=&apos;|EXTRA_ARGS=&apos;--registry-mirror=`获取到的加速地址` |g&quot; /var/lib/boot2docker/profile</span><br><span class="line">$ exit</span><br><span class="line">$ docker-machine restart default</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>docker-compose使用</p>
+<ul>
+<li>‘gbk’ codec can’t decode byte 0xb0 in position 1816: illegal<ul>
+<li>docker-compose.yml文件注释问题???</li>
+<li>删掉多余的文件注释好了</li>
+<li>格式空格问题???</li>
+<li>中文注释,有的行,有的不行???</li>
+<li><a href="https://github.com/moby/moby/issues/34167" target="_blank" rel="noopener">文件解析错误</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type</p>
+<ul>
+<li>主机目录需要挂载(共享)到虚拟机</li>
+<li>一些文件需要设置为读写权限????????(rw)</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>the input device is not a TTY. If you are using mintty, try prefixing the</p>
+<ul>
+<li>在命令前面加上winpty </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>本地mysql数据库使用(<code>暂未解决</code>)</p>
+<ul>
+<li>Docker mysql [Warning] World-writable config file ‘.cnf’ is is ignored</li>
+<li><a href="https://blog.csdn.net/kinginblue/article/details/76863962" target="_blank" rel="noopener">参考网址</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Temporary failure in name resolution</p>
+<ul>
+<li>可能开了ssr代理的时候启动虚拟机</li>
+<li>重新启动docker-machine就好了</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>网络地址分配错误,重新分配网络地址</p>
+<ul>
+<li>certificate is valid for 192.168.99.102, not 192.168.99.100</li>
+<li><code>$ docker-machine regenerate-certs [name]</code></li>
+</ul>
+</blockquote>
+<h3 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h3><blockquote>
+<p>使用已有docker-file文件<br><a href="https://github.com/goozp/zPhal-dockerfiles" target="_blank" rel="noopener">zPhal-dockerfiles</a></p>
+</blockquote>
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><blockquote>
+<p>查看日志<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker logs &lt;容器&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>查看docker容器挂载目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect container_name | grep Mounts -A 20</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : xiaoxiaoxiao <br>
+        
+        原文链接 : <a href>/passages/docker/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/php/">
+              #php
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/docker/">
+              #docker
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/env/">
+              #env
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/passages/blog/" target="_self">个人博客搭建</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/passages/git/" target="_self">git使用记录</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+      <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a>提供统计服务
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 2, 17).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

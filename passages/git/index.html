@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="风">
+  
+  
+  
+  <title>git使用记录 | 风</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="git,git,env,tool,版本控制,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="blog">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">风 | xiaoxiaoxiao</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/xiaoxiaoxiaox" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>git使用记录</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-06-01
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/git/">
+            git
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p></p>
+<ul>
+<li><a href="#配置">git配置</a></li>
+<li><a href="#基础">基础使用</a></li>
+<li><a href="#分布式">分布式工作流程</a></li>
+<li><a href="#合并&amp;回滚">合并</a></li>
+<li><a href="#服务器">搭建自己的git服务器</a></li>
+</ul>
+<hr>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h2 id="…"><a href="#…" class="headerlink" title="…"></a>…</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><blockquote>
+<p><strong>切换分支</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#切换到远程仓库已有的test分支</span><br><span class="line">$ git checkout test</span><br><span class="line">#切换到一个新的test分支,需要本地仓库不存在</span><br><span class="line">$ git checkout -b test</span><br><span class="line">#从当前分支的12rf`commit`提交出切换出一个新的分支</span><br><span class="line">$ git checkout -b test 12rf</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>push &amp;&amp; pull</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#提交代码本地master到远程origin库master分支</span><br><span class="line">$ git push origin master</span><br><span class="line"></span><br><span class="line">#设置默认push &amp;&amp; pull分支</span><br><span class="line">#git push -&gt; git push origin master</span><br><span class="line">#git pull -&gt; git pull origin master</span><br><span class="line">$ git push -u origin master</span><br><span class="line"></span><br><span class="line">#强制更新本地代码</span><br><span class="line">#拉取代码到本地不合并</span><br><span class="line">$ git fetch -all</span><br><span class="line">#放弃本地所有修改跳到远程master分支</span><br><span class="line">$ git reset --hard origin/master</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>分支管理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看分支</span><br><span class="line">#a 查看所有分支</span><br><span class="line">#v 显示分支状态</span><br><span class="line">$ git branch -av</span><br><span class="line"></span><br><span class="line">#删除分支</span><br><span class="line"></span><br><span class="line">#删除test分支,信息不同无法删除</span><br><span class="line">$ git branch -d test</span><br><span class="line">#强制删除test分支</span><br><span class="line">$ git branch -D test</span><br><span class="line"></span><br><span class="line">#删除远程分支test</span><br><span class="line">$ git push --delete origin test</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="…-1"><a href="#…-1" class="headerlink" title="…"></a>…</h2><h3 id="分布式工作流程"><a href="#分布式工作流程" class="headerlink" title="分布式工作流程"></a>分布式工作流程</h3><h2 id="…-2"><a href="#…-2" class="headerlink" title="…"></a>…</h2><h3 id="合并-amp-回滚"><a href="#合并-amp-回滚" class="headerlink" title="合并&amp;回滚"></a>合并&amp;回滚</h3><blockquote>
+<p><strong>合并一个分支</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#合并test分支到当前分支</span><br><span class="line">$ git merge test</span><br><span class="line"></span><br><span class="line">#正常合并成功</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">#合并有冲突</span><br><span class="line">#1.解决冲突</span><br><span class="line">#提交解决冲突完后的文件</span><br><span class="line">$ git add &lt;有冲突的文件&gt;</span><br><span class="line"># 提交本次合并信息</span><br><span class="line">$ git merge --continue</span><br><span class="line"></span><br><span class="line">#2.放弃本次合并,回滚到合并前</span><br><span class="line">$ git merge --abort</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>合并单个文件</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#将test的a.txt文件复制到当前分支</span><br><span class="line">#放弃当前分支对a.txt的所有更改,直接应用test分支的a.txt内容</span><br><span class="line">$ git checkout test a.txt</span><br><span class="line"></span><br><span class="line">#将test的a.txt文件复制到当前分支</span><br><span class="line">#对比两个分支中的a.txt文件的更改</span><br><span class="line">#通过选项选择合适的合并方式</span><br><span class="line">#y -将此块应用于索引和工作树</span><br><span class="line">#n -不要将此块应用于索引和工作树</span><br><span class="line">#q -退出;不应用这块或任何其他的</span><br><span class="line">#a -应用这个块和所有以后的块在文件中</span><br><span class="line">#d -不要应用此块或任何后期块在文件中</span><br><span class="line">#e -手动编辑当前块</span><br><span class="line">#? —打印帮助</span><br><span class="line">$ git checkout --patch test a.txt</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>合并其他分支的commit提交</strong></p>
+<ul>
+<li>这里的冲突解决只是本次合并的解决,创建了一个新的<code>commit</code></li>
+<li>当以后执行<code>merge</code>合并<code>commit</code>所在的分支时仍需解决冲突<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#获取某次commit提交的内容到当前分支</span><br><span class="line">#获取的commit跟当前的commit对比有多处修改,则需要解决冲突</span><br><span class="line">$ git cherry-pick &lt;commit&gt;</span><br><span class="line">#冲突了,取消本次合并</span><br><span class="line">$ git cherry-pick --abort</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>使当前分支<code>head</code>跳到某个分支</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#使当前的head跳到test分支</span><br><span class="line">#当前分支的所有commit将丢失到仓库</span><br><span class="line">$ git rebase --onto test dev</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>变基</strong></p>
+<ul>
+<li><a href="https://www.git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA" target="_blank" rel="noopener">详细例子</a></li>
+</ul>
+</blockquote>
+<p><img src="https://www.git-scm.com/book/en/v2/images/interesting-rebase-1.png" alt="1"><br><img src="https://www.git-scm.com/book/en/v2/images/interesting-rebase-2.png" alt="2"><br><img src="https://www.git-scm.com/book/en/v2/images/interesting-rebase-3.png" alt="3"><br><img src="https://www.git-scm.com/book/en/v2/images/interesting-rebase-4.png" alt="4"><br><img src="https://www.git-scm.com/book/en/v2/images/interesting-rebase-5.png" alt="5"> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#client是从server分支中衍生出来了</span><br><span class="line">#这个命令放弃client中server分支的所有更改</span><br><span class="line"># c6&lt;-c8&apos;&lt;-c9&apos;   本次c8中已放弃c3分支的所有更改</span><br><span class="line">$ git rebase --onto master server client</span><br><span class="line"></span><br><span class="line">#将client的头分支变成master分支</span><br><span class="line">#c6&lt;-c3&apos;&lt;-c8&apos;&lt;-c9&apos;</span><br><span class="line">$ git rebase master client</span><br></pre></td></tr></table></figure>
+<ul>
+<li>变基是使分支看起来是一条直线的工作流程</li>
+<li>合并是多分支交叉</li>
+<li>如果c8修改了c3中的文件则变基时需要解决冲突,是否确认保存</li>
+<li>变基时执行所在的分支随意</li>
+<li>变基后需要手动使用<code>merge</code>合并目标分支</li>
+</ul>
+<blockquote>
+<p><strong>回滚</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#回滚当前分支到指定的`commit`处</span><br><span class="line">$ git reset --hard adae</span><br><span class="line"></span><br><span class="line">#HEAD代表的是当前的工作头</span><br><span class="line">#回滚到当前分支的上一次提交</span><br><span class="line">$ git reset --hard HEAD^</span><br><span class="line"></span><br><span class="line">#回滚到当前分支的上两次提交</span><br><span class="line">$ git reset --hard HEAD^^</span><br><span class="line"></span><br><span class="line">#回滚到当前分支的前100次提交</span><br><span class="line">$ git reset --hard HEAD~100</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>日志</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#查看当前分支的log</span><br><span class="line">$ git log</span><br><span class="line"></span><br><span class="line">#将当前的分支显示信息以当行的形式显示出来</span><br><span class="line">$ git log --pretty=oneline</span><br><span class="line"></span><br><span class="line">#查看本地仓库操作的所有日志</span><br><span class="line">#上次的一些回滚操作的commit信息留存在此处</span><br><span class="line">$ git reflog</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<hr>
+<h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><blockquote>
+<p>创建一个裸仓库</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init --bare</span><br></pre></td></tr></table></figure>
+<hr>
+<p>待续…</p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : xiaoxiaoxiao <br>
+        
+        原文链接 : <a href>/passages/git/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/git/">
+              #git
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/env/">
+              #env
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/tool/">
+              #tool
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/版本控制/">
+              #版本控制
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/passages/docker/" target="_self">docker部署工作环境</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/passages/travis-CI/" target="_self">travis-CI</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+      <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a>提供统计服务
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 2, 17).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

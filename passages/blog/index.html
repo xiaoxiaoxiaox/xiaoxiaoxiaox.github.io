@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="风">
+  
+  
+  
+  <title>个人博客搭建 | 风</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="tool,git,hexo,php,linux,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="blog">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">风 | xiaoxiaoxiao</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a href="/categories/" target="_self">
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a href="/friends/" target="_self">
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a href="/about/" target="_self">
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/xiaoxiaoxiaox" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>个人博客搭建</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-31
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/tool/">
+            tool
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h4 id="开始前准备"><a href="#开始前准备" class="headerlink" title="开始前准备"></a><strong>开始前准备</strong></h4><ul>
+<li><a href="https://promotion.aliyun.com/ntms/act/campus2018.html?spm=5176.10695662.1244717.1.17df4336lMyPnJ" target="_blank" rel="noopener">阿里云服务学生机购买￥9.5/月</a></li>
+<li><a href="http://github.com" target="_blank" rel="noopener">git创建仓库,配置ssh秘钥</a></li>
+<li><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">hexo文档</a></li>
+<li><a href="https://godbmw.com/passages/2018-11-15-theme-bmw-docs-zh/" target="_blank" rel="noopener">使用的主题样式</a></li>
+<li><a href="https://github.com/coreybutler/nvm-windows/releases" target="_blank" rel="noopener">nvm安装</a></li>
+</ul>
+<hr>
+<h4 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a><strong>开始安装</strong></h4><blockquote>
+<p>使用node部署hexo</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看最新node版本</span></span><br><span class="line">$ nvm list available</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装node版本</span></span><br><span class="line">$ nvm install 11.13.0</span><br><span class="line"></span><br><span class="line"><span class="comment">#切换到安装的node版本</span></span><br><span class="line">$ nvm use 11.13.0</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用node全局安装hexo</span></span><br><span class="line">$ npm install -g hexo-cli</span><br><span class="line"></span><br><span class="line"><span class="comment">#初始化你的博客</span></span><br><span class="line">$ hexo init your-blog</span><br><span class="line">$ <span class="built_in">cd</span> your-blog</span><br><span class="line">$ git <span class="built_in">clone</span> git@github.com:dongyuanxin/theme-bmw.git themes/bmw</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://godbmw.com/passages/2018-11-15-theme-bmw-docs-zh/" target="_blank" rel="noopener">主题详细使用点这里</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#启动本地服务器,默认4000端口</span><br><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><blockquote>
+<p><a href="https://hexo.io/zh-cn/docs/deployment" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<blockquote>
+<p>部署git</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#安装 hexo-deployer-git</span><br><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line">#../your-blog/_config.yml 82行左右</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;repository url&gt; #https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io</span><br><span class="line">  branch: [branch] #published</span><br><span class="line">  message: [message]</span><br><span class="line">  </span><br><span class="line">#部署完成运行以下命令将生成html文件上传到指定的git仓库</span><br><span class="line">$ hexo deploy</span><br><span class="line"></span><br><span class="line">#清除原先缓存跟文件重新部署</span><br><span class="line">$ hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>git配置webhook</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务器使用lnmpa一键部署web环境</span></span><br><span class="line"><span class="comment">#查看nginx服务所使用的linux用户,默认为www用户</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#linux切换用户登录</span></span><br><span class="line">$ su www</span><br><span class="line"></span><br><span class="line"><span class="comment">#提示 This account is currently not available进行以下操作</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#修改 /etc/passwd 文件</span></span><br><span class="line"><span class="comment"># 将www用户的  :/sbin/nologin  改为 :/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#接着切换www用户登录</span></span><br><span class="line"><span class="comment">#生成ssh秘钥</span></span><br><span class="line">$ ssh-keygen -t rsa -b 4096 -C <span class="string">"your_email@example.com"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查看生成的ssh秘钥</span></span><br><span class="line">$ cat ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line"><span class="comment">#部署到git ssh配置中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#git webhook中的请求地址填写阿里云解析的钩子地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#webhook请求参数选择 application/json方式</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>阿里云服务器配置</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 解析一个额外的域名到服务器,如:webhook.yousite.com,将此域名作为钩子</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>linux设置权限</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#假设blog目录部署在/home/www/blog</span><br><span class="line">#设置www用户文件所有权</span><br><span class="line"></span><br><span class="line">$ chown -R www:www /home/www/blog</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>php自动部署git脚本</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">error_reporting(E_ALL);</span><br><span class="line"><span class="comment">//设置请求超时时间</span></span><br><span class="line">set_time_limit(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">$signature = $_SERVER[<span class="string">'HTTP_X_HUB_SIGNATURE'</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">//webhook secret</span></span><br><span class="line">$token = <span class="string">'部署在git webhook中的secret'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取json数据</span></span><br><span class="line">$json_post  = file_get_contents(<span class="string">"php://input"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//生成签名</span></span><br><span class="line">$sha1 = hash_hmac(<span class="string">'sha1'</span>, $json_post, $token);</span><br><span class="line"></span><br><span class="line"><span class="comment">//签名验证</span></span><br><span class="line"><span class="keyword">if</span> ($signature !== <span class="string">'sha1='</span> . $sha1) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'sign error'</span>;</span><br><span class="line">    <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//该目录为git检出目录</span></span><br><span class="line">$dir = <span class="string">'/home/www/blog'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//git更新命令</span></span><br><span class="line"><span class="comment">//有时git会去读取root用户的git配置,导致无权限,更新失败.</span></span><br><span class="line"><span class="comment">//此处暂用手动设置用户信息的方式解决</span></span><br><span class="line">$command = <span class="string">"cd &#123;$dir&#125;  &amp;&amp; git config user.name 'xiaoxiaoxiao' "</span>.</span><br><span class="line">    <span class="string">"&amp;&amp; git config user.email '1605882811@qq.com' "</span>.</span><br><span class="line"><span class="comment">//    "&amp;&amp; git checkout . &amp;&amp; git pull --force origin master 2&gt;&amp;1"; //强制更新</span></span><br><span class="line">     <span class="string">"&amp;&amp; git checkout . &amp;&amp; git fetch --all &amp;&amp; git reset --hard origin/master"</span>; <span class="comment">//强制覆盖本地分支</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//执行命令</span></span><br><span class="line">exec($command, $output);</span><br><span class="line">var_dump($output);</span><br><span class="line"><span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>新的博客更新方式<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : xiaoxiaoxiao <br>
+        
+        原文链接 : <a href>/passages/blog/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/git/">
+              #git
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/hexo/">
+              #hexo
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/php/">
+              #php
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/linux/">
+              #linux
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+
+  <nav class="post-navigation">
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/passages/docker/" target="_self">docker部署工作环境</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+      <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a>提供统计服务
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 2, 17).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
